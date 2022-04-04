@@ -1,5 +1,8 @@
 #include "SharedMemoryConvention.hpp"
 
+#include <stdio.h>
+#include <unistd.h>
+
 void lockSharedMemoryWithConvention(SharedMemoryConvention* shmem) {
     uint64_t value = 1;
     uint64_t refcount = __sync_fetch_and_add(&shmem->refcount, value); // Get the value, then do the operation: `*writePtr += value`

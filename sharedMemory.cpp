@@ -2,7 +2,9 @@
 
 // https://github.com/lassik/shm_open_anon from https://stackoverflow.com/questions/55704758/is-there-anything-like-shm-open-without-filename . More reference: https://nullprogram.com/blog/2016/04/10/
 
+extern "C" {
 #include "shm_open_anon/shm_open_anon.h"
+}
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/mman.h>
@@ -12,6 +14,7 @@
 
 #include <fcntl.h>
 #include <errno.h>
+#include <sys/stat.h>
 
 // https://github.com/lassik/shm_open_anon/blob/master/test_shared.c
 
