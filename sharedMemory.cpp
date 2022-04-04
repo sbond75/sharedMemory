@@ -68,7 +68,7 @@ map_shared_memory_from_fd(int fd, size_t *out_size)
 
 void* create_shared_memory(size_t size, int* out_fd) {
   char *buf;
-  size_t bufsize;
+  size_t bufsize = size;
   int fd;
 
   if ((fd = shm_open_anon_shared()) == -1)
