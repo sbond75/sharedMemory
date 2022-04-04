@@ -11,10 +11,10 @@ struct SharedMemoryConventionTemplate {
         imgHeight_(imgHeight)
     {}
 
-    union {
-        uint64_t frameCounter;
-        char msg[8];
-    };
+    // union {
+    uint64_t frameCounter;
+    //     char msg[8];
+    // };
     uint64_t refcount;
     int imgWidth_, imgHeight_;
     uint8_t mat[imgWidth*imgHeight*3];
