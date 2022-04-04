@@ -15,14 +15,14 @@
 
 // https://github.com/lassik/shm_open_anon/blob/master/test_shared.c
 
-static void
+void
 diesys(const char *msg)
 {
 	fprintf(stderr, "%s: %s\n", msg, strerror(errno));
 	exit(1);
 }
 
-static int
+int
 fd_without_close_on_exec(int fd)
 {
 	int flags;
@@ -35,7 +35,7 @@ fd_without_close_on_exec(int fd)
 	return fd;
 }
 
-static int
+int
 shm_open_anon_shared(void)
 {
         int fd;
@@ -45,7 +45,7 @@ shm_open_anon_shared(void)
 	return fd_without_close_on_exec(fd);
 }
 
-static void *
+void *
 map_shared_memory_from_fd(int fd, size_t *out_size)
 {
 	struct stat st;
@@ -63,7 +63,7 @@ map_shared_memory_from_fd(int fd, size_t *out_size)
 	return buf;
 }
 
-static void* create_shared_memory(size_t size, int* out_fd) {
+void* create_shared_memory(size_t size, int* out_fd) {
   char *buf;
   size_t bufsize;
   int fd;
