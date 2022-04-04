@@ -1,3 +1,5 @@
+#pragma once
+
 #include <cstdint>
 
 template <int imgWidth, int imgHeight>
