@@ -59,7 +59,7 @@ map_shared_memory_from_fd(int fd, size_t *out_size)
 		diesys("fstat");
 	}
 	*out_size = size = (size_t)st.st_size;
-	buf = mmap(0, size, PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
+	buf = mmap(0, size, PROT_READ | PROT_WRITE, MAP_SHARED | MAP_ANONYMOUS, fd, 0);
 	if (buf == MAP_FAILED) {
 		diesys("mmap");
 	}
