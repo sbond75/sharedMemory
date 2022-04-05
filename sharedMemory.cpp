@@ -78,7 +78,14 @@ void* create_shared_memory(size_t size, int* out_fd) {
   buf = (char*)map_shared_memory_from_fd(fd, &bufsize);
   memset(buf, 0, bufsize);
   //snprintf(buf, bufsize, "hello from parent");
-  printf("create_shared_memory() with size %zu\n", bufsize);
+  
+  // Show size for debugging purposes
+	struct stat st;
+	if (fstat(fd, &st) == -1) {
+		diesys("fstat");
+	}
+    printf("create_shared_memory() with fd %d, size %zu, actual size %jd\n", fd, bufsize, (intmax_t)st.st_size);
+  
   *out_fd = fd;
   return buf;
 }
