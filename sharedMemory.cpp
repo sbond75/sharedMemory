@@ -78,7 +78,7 @@ void* create_shared_memory(size_t size, int* out_fd) {
   buf = (char*)map_shared_memory_from_fd(fd, &bufsize);
   memset(buf, 0, bufsize);
   //snprintf(buf, bufsize, "hello from parent");
-  printf("create_shared_memory() with size %s\n", bufsize);
+  printf("create_shared_memory() with size %zu\n", bufsize);
   *out_fd = fd;
   return buf;
 }
