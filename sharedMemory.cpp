@@ -22,7 +22,7 @@ void
 diesys(const char *msg)
 {
 	fprintf(stderr, "%s: %s\n", msg, strerror(errno));
-	exit(1);
+	//exit(1);
 }
 
 int
@@ -30,11 +30,15 @@ fd_without_close_on_exec(int fd)
 {
 	int flags;
 
-	if ((flags = fcntl(fd, F_GETFD)) == -1)
+	if ((flags = fcntl(fd, F_GETFD)) == -1) {
 		diesys("get close-on-exec");
+		return -1;
+	}
 	flags &= ~FD_CLOEXEC;
-	if (fcntl(fd, F_SETFD, flags) == -1)
+	if (fcntl(fd, F_SETFD, flags) == -1) {
 		diesys("set close-on-exec");
+		return -1;
+	}
 	return fd;
 }
 
@@ -43,8 +47,10 @@ shm_open_anon_shared(void)
 {
         int fd;
 
-        if ((fd = shm_open_anon()) == -1)
+        if ((fd = shm_open_anon()) == -1) {
                 diesys("shm_open_anon()");
+		return -1;
+	}
 	return fd_without_close_on_exec(fd);
 }
 
@@ -57,11 +63,13 @@ map_shared_memory_from_fd(int fd, size_t *out_size)
 
 	if (fstat(fd, &st) == -1) {
 		diesys("fstat");
+		return nullptr;
 	}
 	*out_size = size = (size_t)st.st_size;
-	buf = mmap(0, size, PROT_READ | PROT_WRITE, MAP_SHARED | MAP_ANONYMOUS, fd, 0);
+	buf = mmap(0, size, PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
 	if (buf == MAP_FAILED) {
 		diesys("mmap");
+		return nullptr;
 	}
 	return buf;
 }
@@ -71,10 +79,14 @@ void* create_shared_memory(size_t size, int* out_fd) {
   size_t bufsize = size;
   int fd;
 
-  if ((fd = shm_open_anon_shared()) == -1)
+  if ((fd = shm_open_anon_shared()) == -1) {
     diesys("shm_open_anon_shared");
-  if (ftruncate(fd, (off_t)bufsize) == -1)
+    return nullptr;
+  }
+  if (ftruncate(fd, (off_t)bufsize) == -1) {
     diesys("ftruncate");
+    return nullptr;
+  }
   buf = (char*)map_shared_memory_from_fd(fd, &bufsize);
   memset(buf, 0, bufsize);
   //snprintf(buf, bufsize, "hello from parent");
@@ -83,6 +95,7 @@ void* create_shared_memory(size_t size, int* out_fd) {
 	struct stat st;
 	if (fstat(fd, &st) == -1) {
 		diesys("fstat");
+		return nullptr;
 	}
     printf("create_shared_memory() with fd %d, size %zu, actual size %jd\n", fd, bufsize, (intmax_t)st.st_size);
   
