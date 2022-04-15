@@ -16,6 +16,8 @@ extern "C" {
 #include <errno.h>
 #include <sys/stat.h>
 
+#include <stdint.h>
+
 // https://github.com/lassik/shm_open_anon/blob/master/test_shared.c
 
 void
